@@ -8,14 +8,8 @@ from uuid import uuid4
 from dotenv import load_dotenv
 
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
-from telegram.ext import (
-    ApplicationBuilder,
-    filters,
-    CommandHandler,
-    ContextTypes,
-    InlineQueryHandler,
-    MessageHandler,
-)
+from telegram.ext import (ApplicationBuilder, CommandHandler, ContextTypes,
+                          InlineQueryHandler, MessageHandler, filters)
 
 load_dotenv()
 
