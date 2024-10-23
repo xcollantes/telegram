@@ -62,8 +62,8 @@ async def some_action(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     )
     logging.info("Message: %s", update.message._get_attrs())
 
-    logging.info("Message text: %s", update.message.text)
-    logging.info("Args: %s", context.args)
+    logging.info("Message text: %s", update.message.text)  # /do X -> "/do X"
+    logging.info("Args: %s", context.args)  # /do X -> ["X"]
 
     # TODO: Do some logic here.
 
