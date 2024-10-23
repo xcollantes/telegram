@@ -12,6 +12,7 @@ from telegram.ext import (ApplicationBuilder, CommandHandler, ContextTypes,
                           InlineQueryHandler, MessageHandler, filters)
 
 load_dotenv()
+TELEGRAM_APIKEY: str = os.environ["TELEGRAM_APIKEY"]
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(lineno)s %(levelname)s - %(message)s",
@@ -20,17 +21,20 @@ logging.basicConfig(
 
 
 def main() -> None:
-    telegram_app: ApplicationBuilder = build_application(
-        token=os.environ["TELEGRAM_APIKEY"]
-    )
+    telegram_app: ApplicationBuilder = build_application(token=TELEGRAM_APIKEY)
 
-    # Command on the Telegram app is `/start`
-    start_handler: CommandHandler = CommandHandler("start", start)
-    # Inline is `@my_bot some query`
+    # Command on the Telegram app is `/do`
+    # Texting in app `/do` will call `some_action()`
+    # "Start" is not required
+    some_action_handler: CommandHandler = CommandHandler("do", some_action)
+
+    # Inline in Telegram app is `@my_bot some query`
     caps_handler: InlineQueryHandler = InlineQueryHandler(inline_caps)
+
+    # Handler for errors and other fallback cases.
     fallback_handler: MessageHandler = MessageHandler(filters.COMMAND, fallback)
 
-    telegram_app.add_handler(start_handler)
+    telegram_app.add_handler(some_action_handler)
     telegram_app.add_handler(caps_handler)
     telegram_app.add_handler(fallback_handler)  # Error fallback handlers must be last.
 
@@ -43,16 +47,23 @@ def build_application(token: str) -> ApplicationBuilder:
     return ApplicationBuilder().token(token).build()
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Receives a Telegram message that contains the /start command.
+async def some_action(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Receives a Telegram message that contains the /do command.
+
+    Then sends a response message.
 
     Args:
         update: Contains the user message and information about who issued
             command, etc.
         context: Status of the app.
     """
-    logging.info("Calling /start: update: %s context: %s", update, context.chat_data)
+    logging.info(
+        "Calling /some_action: update: %s context: %s", update, context.chat_data
+    )
     logging.info("Message: %s", update.message._get_attrs())
+
+    # TODO: Do some logic here.
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=f"Hello {update.effective_sender.name}",
