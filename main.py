@@ -67,10 +67,21 @@ async def some_action(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 
     # TODO: Do some logic here.
 
+    # Send a message to the user.
+    #
+    # Options: https://docs.python-telegram-bot.org/en/stable/telegram.message.html#message
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=f"Hello {update.effective_sender.name}",
     )
+
+    # `reply_text` is shortcut for `send_message` if text only.
+    #
+    # await update.message.reply_text("Hello, I am a bot. I can do anything.")
+
+    # Markdown formatted messages.
+    #
+    # await update.message.reply_markdown("**Bold** and _italic_ ![Link](https://www.google.com)")
 
 
 async def inline_caps(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
